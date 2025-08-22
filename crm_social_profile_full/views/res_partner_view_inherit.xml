@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <menuitem name="Clientes"
+              id="menu_customer_crm_back"
+              action="res_partner_action_customer_crm_back"
+              parent="crm.crm_menu_root"
+              sequence="22"
+              groups="base.group_no_one"/>
+
+    <!--     Add Social Media Tab in res partner form view -->
+
+    <record id="view_res_partner_form_inherit_social" model="ir.ui.view">
+        <field name="name">res.partner.form.social.profile</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='avatar_128']" position="before">
+                <widget name="web_ribbon" title="Completed Profile"
+                        bg_color="bg-success" attrs="{'invisible': [('is_profile_complete', '=', False)]}"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Redes Sociales" name="social_tab">
+                    <div class="o_row">
+                        <span class="fa fa-facebook" style="margin-right:8px; color:#3b5998;"/>
+                        <field name="facebook_url" widget="url"/>
+                    </div>
+                    <br/>
+                    <div class="o_row">
+                        <span class="fa fa-twitter" style="margin-right:8px; color:#1da1f2;"/>
+                        <field name="twitter_url" widget="url"/>
+                    </div>
+                    <br/>
+                    <div class="o_row">
+                        <span class="fa fa-linkedin" style="margin-right:8px; color:#0077b5;"/>
+                        <field name="linkedin_url" widget="url"/>
+                    </div>
+                    <br/>
+                    <div class="o_row">
+                        <span class="fa fa-instagram" style="margin-right:8px; color:#c32aa3;"/>
+                        <field name="instagram_url" widget="url"/>
+                    </div>
+                    <field name="is_profile_complete" invisible="1"/>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+
+    <!-- Tree view: Show indicator-->
+    <record id="view_partner_tree_inherit_social" model="ir.ui.view">
+        <field name="name">res.partner.tree.social.profile</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="inside">
+                <field name="is_profile_complete" widget="boolean_toggle"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <!-- kanban view -->
+    <record id="view_partner_kanban_inherit_social" model="ir.ui.view">
+        <field name="name">res.partner.kanban.social.profile</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.res_partner_kanban_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[contains(@class,'oe_kanban_details')]" position="inside">
+                <field name="is_profile_complete" invisible="1"/>
+                <t t-if="record.is_profile_complete and record.is_profile_complete.raw_value">
+                    <span class="badge badge-success mt-1">
+                        <i class="fa fa-check"/>
+                        Perfil completo
+                    </span>
+                </t>
+            </xpath>
+        </field>
+    </record>
+
+
+    <!--   view search  -->
+    <record id="res_partner_view_search_inherit_social" model="ir.ui.view">
+        <field name="name">res.partner.search.social.profile</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <field name="name"/>
+                <field name="facebook_url"/>
+                <field name="linkedin_url"/>
+                <field name="twitter_url"/>
+                <field name="instagram_url"/>
+                <filter name="incomplete_profiles" string="Perfiles incompletos"
+                        domain="[('is_profile_complete','=',False)]"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
