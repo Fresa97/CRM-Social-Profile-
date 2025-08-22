@@ -3,7 +3,7 @@
 
     <menuitem name="Clientes"
               id="menu_customer_crm_back"
-              action="res_partner_action_customer_crm_back"
+              action="account.res_partner_action_customer"
               parent="crm.crm_menu_root"
               sequence="22"
               groups="base.group_no_one"/>
